@@ -1,0 +1,9 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/..\FrameXML\UI.xsd">
+	<Script file="IPC.lua" />
+	<Frame name="IPCFrame" hidden="true" parent="UIParent">
+		<Scripts>
+			<OnLoad>IPC_OnLoad()</OnLoad>
+			<OnEvent>IPC_OnEvent(event, ...)</OnEvent>
+		</Scripts>
+	</Frame>
+</Ui>

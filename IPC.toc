@@ -1,0 +1,7 @@
+## Interface: 50400
+## Title: IPC
+## Author: AipNooBest
+## Version: v1.0
+## Notes: Encodes player information into colorful array at the top of your screen for Discord Rich Presence.
+local.lua
+IPC.xml
