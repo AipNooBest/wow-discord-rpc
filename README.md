@@ -22,6 +22,8 @@ If you see them, then AddOn is working properly. That means that you already sho
 
 That's it! Now you have a pleasant and informative Rich Presence in your Discord profile. It will update automatically as long as the script is kept running.
 
+If you want to translate it to your language, you can edit `local.lua` file and the line 11 at the `WoWPresence.py`. Zones name will be localised automatically based on your game's locale.
+
 ## LICENSE
 Both the addon and the WoWPresence.py script are in the public domain.
 The rpc.py file is from [this repo](https://github.com/suclearnub/python-discord-rpc) and it's [MIT licenced](https://raw.githubusercontent.com/wodim/wow-discord-rich-presence/master/script/rpc.py-LICENSE).
