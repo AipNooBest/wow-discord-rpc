@@ -137,6 +137,8 @@ while True:
             }
             print("Setting activity: %s" % inMainMenu)
             update_activity(activity)
+            time.sleep(3)
+            continue
         else:
             zoneName, playerLevel, playerName, playerInfo, engClass, playerState, mapID = lines
 
