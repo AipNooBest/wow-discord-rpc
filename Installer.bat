@@ -2,7 +2,7 @@
 :: Check for Python Installation
 py --version 3>NUL
 if errorlevel 1 goto errorNoPython
-pip install pillow pywin32
+py -m pip install pillow pywin32
 echo start ../../../Wow.exe>WoW.bat
 echo py script/WoWPresence.py>>WoW.bat
 del /f Installer.bat
