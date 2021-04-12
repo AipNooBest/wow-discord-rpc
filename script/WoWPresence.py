@@ -6,6 +6,7 @@ import os
 import ast
 from PIL import Image, ImageGrab
 import win32gui
+import logging
 
 # localisation variables. Change them for your preferences.
 inMainMenu = "In main menu"
@@ -25,6 +26,11 @@ timePlayed = None
 dir_path = os.path.dirname(os.path.realpath(__file__))
 f = open(dir_path + '/zones.txt')
 zones = ast.literal_eval(f.read())
+logging.basicConfig(filename='log.txt', filemode='w', encoding='utf-8', level=logging.INFO)
+print("The script is running!\n"
+      "Now you can minimize the window and play WoW.\n"
+      "The script will terminate automatically when you exit the game.\n"
+      "Check log.txt if you need detailed information.")
 
 
 def callback(hwnd, extra):
@@ -41,9 +47,11 @@ def read_squares(hwnd):
     try:
         im = ImageGrab.grab(new_rect)
     except Image.DecompressionBombError:
-        print('DecompressionBombError')
+        logging.error('DecompressionBombError')
         return 0
 
+    # Check if there's a message at the top left corner.
+    # If there's none, then we're either in main menu or addon is not working.
     r, g, b = im.getpixel((0, 0))
     r2, g2, b2 = im.getpixel((1, 0))
     if not r == g == b == 36 and not r2 == g2 == b2 == 0:
@@ -70,7 +78,9 @@ def read_squares(hwnd):
     try:
         decoded = bytes(read).decode('utf-8').rstrip('\0')
     except Exception as exc:
-        print('Error decoding the pixels: %s.' % exc)
+        logging.error('Error decoding the pixels: %s.' % exc)
+        print('Something is overlapping information pixels, or the game is running in full-screen. '
+              'If it so, change the mode to windowed or borderless.')
         return 0
     parts = decoded.replace('$$$', '').split('|')
 
@@ -86,20 +96,19 @@ def read_squares(hwnd):
 def connect_to_discord():
     global rpc_obj
     if not rpc_obj:
-        print('Not connected to Discord, connecting...')
+        logging.info('Not connected to Discord, connecting...')
         while True:
             try:
                 rpc_obj = (rpc.DiscordIpcClient
                            .for_platform("827272838771507210"))
             except Exception as exc:
-                print("I couldn't connect to Discord (%s). It's "
-                      'probably not running. I will try again in 5 '
-                      'sec.' % str(exc))
+                logging.warning("I couldn't connect to Discord (%s). It's "
+                                'probably not running. I will try again in 5 '
+                                'sec.' % str(exc))
                 time.sleep(5)
                 pass
             else:
                 break
-        print('Connected to Discord.')
 
 
 def update_activity(activity):
@@ -108,8 +117,8 @@ def update_activity(activity):
     try:
         rpc_obj.set_activity(activity)
     except Exception as exc:
-        print('Looks like the connection to Discord was broken (%s). '
-              'I will try to connect again in 5 sec.' % str(exc))
+        logging.warning('Looks like the connection to Discord was broken (%s). '
+                        'I will try to connect again in 5 sec.' % str(exc))
         lastZone, lastPlayerLevel, lastPlayerName, lastPlayerInfo, lastEngClass, lastState = None, None, None, None, None, None
         rpc_obj = None
 
@@ -121,10 +130,11 @@ while True:
     if win32gui.GetForegroundWindow() == wow_hwnd:
         lines = read_squares(wow_hwnd)
 
-        if not lines:
-            time.sleep(1)
+        if not lines:  # Something went wrong
+            time.sleep(5)
             continue
-        elif lines == 1:
+
+        elif lines == 1:  # We know that we're either in main menu or addon is not working
             connect_to_discord()
             if timePlayed is None:
                 timePlayed = {'start': round(time.time())}
@@ -135,7 +145,7 @@ while True:
                     'large_image': "wow-icon"
                 }
             }
-            print("Setting activity: %s" % inMainMenu)
+            logging.info("Setting activity: %s" % inMainMenu)
             update_activity(activity)
             time.sleep(3)
             continue
@@ -151,10 +161,9 @@ while True:
                 lastEngClass = engClass
                 lastPlayerState = playerState
                 lastMapID = mapID
-
                 connect_to_discord()
 
-                print('Setting new activity: %s - %s - %s - %s - %s - %s - %s' % (
+                logging.info('Setting new activity: %s - %s - %s - %s - %s - %s - %s' % (
                     zoneName, playerLevel, playerName, playerInfo, engClass, playerState, mapID))
 
                 if timePlayed is None:
@@ -163,7 +172,7 @@ while True:
                     zone = zones[str(mapID)]
                 else:
                     zone = "wow-icon"
-                    print("The zone is not in the list: %s [ID: %s]" % (zoneName, mapID))
+                    logging.warning("The zone is not in the list: %s [ID: %s]" % (zoneName, mapID))
                 activity = {
                     'details': "%s [%s LVL]" % (playerName, playerLevel),
                     'state': playerState,
@@ -178,7 +187,7 @@ while True:
                 update_activity(activity)
 
     elif not wow_hwnd and rpc_obj:
-        print('WoW no longer exists, terminating...')
+        logging.info('WoW no longer exists, terminating...')
         rpc_obj.close()
         sys.exit()
     time.sleep(5)
