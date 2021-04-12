@@ -78,28 +78,29 @@ function IPC_PaintSomething(text)
 end
 
 function IPC_EncodeZoneType()
-	local _, instanceType, _, difficultyName, _,
-		_, _, _, _, _ = GetInstanceInfo()
-	local locClass, engClass, locRace, _, _, playerName, _ = GetPlayerInfoByGUID(UnitGUID("player"))
-	local playerLevel = UnitLevel("player")
-	local zoneName = GetRealZoneText()
+    local _, instanceType, _, difficultyName, _,
+    _, _, _, _, _ = GetInstanceInfo()
+    local locClass, engClass, locRace, _, _, playerName, _ = GetPlayerInfoByGUID(UnitGUID("player"))
+    if locClass == nil then return "___" end
+    local playerLevel = UnitLevel("player")
+    local zoneName = GetRealZoneText()
     local subZone = GetSubZoneText()
     local memberCount = GetNumGroupMembers() -- Use GetNumPartyMembers() for <5.0.4
     local mapID, _ = GetCurrentMapAreaID()
     local details
-	if zoneName == nil then zoneName = UnknownZoneName end
-	if instanceType == 'party' then
-		zoneName = string.format(zoneName .. '(%s)', difficultyName)
-	elseif instanceType == 'raid' then
-		zoneName = string.format(zoneName .. '(%s)', difficultyName)
-	elseif instanceType == 'pvp' then
-		zoneName = playerOnBattleGround
-	else
-		if UnitIsDeadOrGhost("player") and not UnitIsDead("player") then
-		    playerName = playerName .. playerIsDead
-		end
+    if zoneName == nil then zoneName = UnknownZoneName end
+    if instanceType == 'party' then
+        zoneName = string.format(zoneName .. '(%s)', difficultyName)
+    elseif instanceType == 'raid' then
+        zoneName = string.format(zoneName .. '(%s)', difficultyName)
+    elseif instanceType == 'pvp' then
+        zoneName = playerOnBattleGround
+    else
+        if UnitIsDeadOrGhost("player") and not UnitIsDead("player") then
+            playerName = playerName .. playerIsDead
+        end
         if subZone ~= "" then zoneName = zoneName .. ", " .. subZone end
-	end
+    end
     if memberCount == 0 then
         local maxXP = UnitXPMax("player")
         local XP = UnitXP("player")
@@ -113,8 +114,8 @@ function IPC_EncodeZoneType()
     else
         details = inGroupOfSomePeople()
     end
-	local playerInfo = locRace .. ", " .. locClass
-	return "$$$" .. zoneName .. "|" .. playerLevel .. "|" .. playerName .. "|" .. playerInfo .. "|" .. engClass .. "|" .. details .. "|" .. mapID .. "$$$"
+    local playerInfo = locRace .. ", " .. locClass
+    return "$$$" .. zoneName .. "|" .. playerLevel .. "|" .. playerName .. "|" .. playerInfo .. "|" .. engClass .. "|" .. details .. "|" .. mapID .. "$$$"
 end
 
 -- received addon events.
