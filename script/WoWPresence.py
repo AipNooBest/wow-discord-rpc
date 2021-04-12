@@ -43,7 +43,7 @@ def callback(hwnd, extra):
 def read_squares(hwnd):
     global decoded
     rect = win32gui.GetWindowRect(hwnd)
-    new_rect = (rect[0], rect[1], rect[2], 1)
+    new_rect = (rect[0], rect[1], rect[2], rect[1]+1)
     try:
         im = ImageGrab.grab(new_rect)
     except Image.DecompressionBombError:
