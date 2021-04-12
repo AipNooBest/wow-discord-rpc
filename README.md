@@ -1,5 +1,5 @@
 # Discord Rich Presence for World of Warcraft
-This particular repository was made for Mists of Pandaria(5.4.8), but it probably will work with other versions. If you are going to run it on other version, you will need to get a new list of zones with their IDs(`script/zones.txt`), because every version has it's own list of IDs. If you will use this on version <5.0.4, change the line 87 in `IPC.lua`.
+This particular repository was made for Mists of Pandaria(5.4.8), but it probably will work with other versions. If you are going to run it on other version, you will need to get a new list of zones with their IDs(`script/zones.txt`), because every version has its own list of IDs. If you use this on version <5.0.4, change the line 87 in `IPC.lua` and the line 6 in `local.lua`.
 I tried to make the installation as easy as possible, so I hope you won't face any problems.
 
 ## Preview
@@ -14,7 +14,7 @@ I tried to make the installation as easy as possible, so I hope you won't face a
 ## Requirements
 - Python 3 for Windows, the [web-based installer](https://www.python.org/downloads/windows/) is OK. When it's finished installing, you will be asked if you want Python to be added to your $PATH, you have to say yes.
 ## Setup
-Create a folder with the name `IPC` in the `Interface/AddOns/`. Then [download](https://github.com/AipNooBest/wow-discord-rpc/archive/refs/heads/main.zip) the repository and decompress it in the newly created directory. Then launch the `Installer.bat`. It will install everything is required, create `WoW.bat` and delete itself. From now on you'll need to run the game from this .bat file. You can make a shortcut and set an icon. **You can't move `WoW.bat` anywhere else, it has to be launched from `AddOns/IPC/` directory.**
+Create a folder with the name `IPC` in the `Interface/AddOns/`. Then [download](https://github.com/AipNooBest/wow-discord-rpc/archive/refs/heads/main.zip) the repository and extract files from `wow-discord-rpc-main` folder into the newly created directory. Then launch the `Installer.bat`. It will install everything is required, create `WoW.bat` and delete itself. From now on you'll need to run the game from this .bat file. You can create a shortcut on your desktop and set an icon. **You can't move `WoW.bat` anywhere else, it has to be launched from `AddOns/IPC/` directory.**
 
 **Note:** you have to play the game in borderless or windowed mode, full-screen is **not supported**!
 
@@ -22,7 +22,7 @@ Now you can launch the game through the .bat file and check if it works. It shou
 
 ![image](https://user-images.githubusercontent.com/47401054/113831744-9d97fb00-9790-11eb-862e-8909c7cb6a53.png)
 
-It is? Perfect! Now log into the world and check if you see some colorful array at the top left corner.
+It is? Perfect! Now log into the world and check if you see some colorful array in the top left corner.
 
 ![image](https://user-images.githubusercontent.com/47401054/113832547-6249fc00-9791-11eb-8360-38b2f2568029.png)
 
