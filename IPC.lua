@@ -1,8 +1,24 @@
 frame_count = 0
 frames = {}
+counter = 0
+prevZone = ""
+prevSubZone = ""
+message = ""
+
+function loop()
+    local f = CreateFrame("Frame");
+    function f:onUpdate(sinceLastUpdate)
+        self.sinceLastUpdate = (self.sinceLastUpdate or 0) + sinceLastUpdate;
+        if ( self.sinceLastUpdate >= 2 ) then -- in seconds
+            self.sinceLastUpdate = 0;
+            local encoded = IPC_EncodeMessage()
+            if encoded ~= nil then IPC_PaintSomething(encoded) end
+        end
+    end
+    f:SetScript("OnUpdate",f.onUpdate)
+end
 
 function IPC_CreateFrames()
-
     frame_count = GetScreenWidth()
 
     for i=1, frame_count do
@@ -50,11 +66,6 @@ function IPC_CleanFrames()
 end
 
 function IPC_PaintSomething(text)
-    --local max_bytes = (frame_count - 1) * 3
-    --if text:len() >= max_bytes then
-    --    return
-    --end
-
     -- clean all
     IPC_CleanFrames()
 
@@ -77,14 +88,16 @@ function IPC_PaintSomething(text)
     IPC_PaintFrame(frames[squares_painted*2-2], 255, 255, 255, 1)
 end
 
-function IPC_EncodeZoneType()
+function IPC_EncodeMessage()
+    local zoneName = GetRealZoneText()
+    if zoneName == nil then return "___" end    -- We're still loading so return symbols like we're in main menu
+    if zoneName == prevZone then return message end     -- These ones are to prevent unnecessary API calls
+    local subZone = GetSubZoneText()
+    if (subZone ~= "" and subZone == prevSubZone) then return message end
+    local locClass, engClass, locRace, _, _, playerName, _ = GetPlayerInfoByGUID(UnitGUID("player"))
     local _, instanceType, _, difficultyName, _,
     _, _, _, _, _ = GetInstanceInfo()
-    local locClass, engClass, locRace, _, _, playerName, _ = GetPlayerInfoByGUID(UnitGUID("player"))
-    if locClass == nil then return "___" end
     local playerLevel = UnitLevel("player")
-    local zoneName = GetRealZoneText()
-    local subZone = GetSubZoneText()
     local memberCount = GetNumGroupMembers() -- Use GetNumPartyMembers() for <5.0.4
     local mapID, _ = GetCurrentMapAreaID()
     local details
@@ -115,24 +128,20 @@ function IPC_EncodeZoneType()
         details = inGroupOfSomePeople()
     end
     local playerInfo = locRace .. ", " .. locClass
-    return "$$$" .. zoneName .. "|" .. playerLevel .. "|" .. playerName .. "|" .. playerInfo .. "|" .. engClass .. "|" .. details .. "|" .. mapID .. "$$$"
+    message = "$$$" .. zoneName .. "|" .. playerLevel .. "|" .. playerName .. "|" .. playerInfo .. "|" .. engClass .. "|" .. details .. "|" .. mapID .. "$$$"
+    prevZone = zoneName
+    prevSubZone = subZone
+    return message
 end
 
 -- received addon events.
-function IPC_OnEvent(event, ...)
-    if event == "PLAYER_LOGIN" then
-        IPC_CreateFrames()
-    elseif event == "PLAYER_LOGIN" or event == "ZONE_CHANGED_NEW_AREA" or event == "WORLD_MAP_UPDATE" then
-        local encoded = IPC_EncodeZoneType()
-        if encoded ~= nil then IPC_PaintSomething(encoded) end
-    end
+function IPC_OnEvent(...)
+    IPC_CreateFrames()
+    loop()
 end
 
 function IPC_OnLoad()
     IPCFrame:RegisterEvent("PLAYER_LOGIN")
-    --IPCFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-    IPCFrame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-    IPCFrame:RegisterEvent("WORLD_MAP_UPDATE")
     SlashCmdList["IPC"] = IPC_PaintSomething
     SLASH_IPC1 = "/ipc"
     SlashCmdList["CLEAN"] = IPC_CleanFrames
