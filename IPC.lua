@@ -91,9 +91,7 @@ end
 function IPC_EncodeMessage()
     local zoneName = GetRealZoneText()
     if zoneName == nil then return "___" end    -- We're still loading so return symbols like we're in main menu
-    if zoneName == prevZone then return message end     -- These ones are to prevent unnecessary API calls
     local subZone = GetSubZoneText()
-    if (subZone ~= "" and subZone == prevSubZone) then return message end
     local locClass, engClass, locRace, _, _, playerName, _ = GetPlayerInfoByGUID(UnitGUID("player"))
     local _, instanceType, _, difficultyName, _,
     _, _, _, _, _ = GetInstanceInfo()
@@ -122,7 +120,7 @@ function IPC_EncodeMessage()
             if XP > 1000 then
                 details = string.format("%.01f", XP/1000) .. "k" .. "/" .. maxXP .. "k XP"
             end
-        else details = math.ceil(GetAverageItemLevel() - 0.5) .. itemLevel
+        else details = math.ceil(GetAverageItemLevel() - 0.5) .. itemLevelStr
         end
     else
         details = inGroupOfSomePeople()
