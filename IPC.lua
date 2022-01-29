@@ -4,6 +4,8 @@ counter = 0
 prevZone = ""
 prevSubZone = ""
 message = ""
+local width = 1
+local height = 1
 
 function loop()
     local f = CreateFrame("Frame");
@@ -24,8 +26,8 @@ function IPC_CreateFrames()
     for i=1, frame_count do
         frames[i] = CreateFrame("Frame", nil, UIParent)
         frames[i]:SetFrameStrata("TOOLTIP")
-        frames[i]:SetWidth(1)
-        frames[i]:SetHeight(1)
+        frames[i]:SetWidth(width)
+        frames[i]:SetHeight(height)
 
         -- initialise it as black
         local t = frames[i]:CreateTexture(nil, "TOOLTIP")
@@ -33,7 +35,7 @@ function IPC_CreateFrames()
         t:SetAllPoints(frames[i])
         frames[i].texture = t
 
-        frames[i]:SetPoint("TOPLEFT", (i - 1), 0)
+        frames[i]:SetPoint("TOPLEFT", (i - 1)*width, 0)
         frames[i]:Show()
     end
 
