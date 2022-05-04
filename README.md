@@ -1,5 +1,5 @@
 # Discord Rich Presence for World of Warcraft
-This particular repository was made for Mists of Pandaria(5.4.8), but it probably will work with other versions. If you are going to run it on other version, you will need to get a new list of zones with their IDs(`script/zones.txt`), because every version has its own list of IDs. If you use this on version <5.0.4, change the line 87 in `IPC.lua` and the line 6 in `local.lua`.
+This particular repository was made for Mists of Pandaria(5.4.8), but it probably will work with other versions. If you are going to run it on other version, you will need to get a new list of zones with their IDs(`script/zones.txt`), because every version has its own list of IDs. If you use this on version <5.0.4, change [this line](https://github.com/AipNooBest/wow-discord-rpc/blob/9d8143a59577c18a380008a51373c239d531c6dc/IPC.lua#L101) in `IPC.lua` and the last line in `local.lua`.
 I tried to make the installation as easy as possible, so I hope you won't face any problems.
 
 ## Preview
