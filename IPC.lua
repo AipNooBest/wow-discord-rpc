@@ -93,7 +93,7 @@ end
 function IPC_EncodeMessage()
     local zoneName = GetRealZoneText()
     if zoneName == nil then return "___" end    -- We're still loading so return symbols like we're in main menu
-    local subZone = GetSubZoneText()
+    local subZone = GetMinimapZoneText()
     local locClass, engClass, locRace, _, _, playerName, _ = GetPlayerInfoByGUID(UnitGUID("player"))
     local _, instanceType, _, difficultyName, _,
     _, _, _, _, _ = GetInstanceInfo()
@@ -112,8 +112,8 @@ function IPC_EncodeMessage()
         if UnitIsDeadOrGhost("player") and not UnitIsDead("player") then
             playerName = playerName .. playerIsDead
         end
-        if subZone ~= "" then zoneName = zoneName .. ", " .. subZone end
     end
+	if subZone ~= "" then zoneName = zoneName .. ", " .. subZone end
     if memberCount == 0 then
         local maxXP = UnitXPMax("player")
         local XP = UnitXP("player")
