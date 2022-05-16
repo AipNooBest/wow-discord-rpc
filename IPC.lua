@@ -122,7 +122,11 @@ function IPC_EncodeMessage()
             if XP > 1000 then
                 details = string.format("%.01f", XP/1000) .. "k" .. "/" .. maxXP .. "k XP"
             end
-        else details = math.ceil(GetAverageItemLevel() - 0.5) .. itemLevelStr
+        else
+			details = math.ceil(GetAverageItemLevel() - 0.5) .. itemLevelStr
+			-- Uncomment these two lines and comment the line above for versions <4.0.1
+			-- local money = GetMoney()
+			-- details = ("%dg %ds %dc"):format(money/100/100, (money/100)%100, money%100)
         end
     else
         details = inGroupOfSomePeople()
