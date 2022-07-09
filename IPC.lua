@@ -118,10 +118,9 @@ function IPC_EncodeMessage()
         local maxXP = UnitXPMax("player")
         local XP = UnitXP("player")
         if maxXP ~= 0 then
-            if maxXP%100 ~= 0 then maxXP = string.format("%.01f", maxXP/1000) else maxXP = maxXP/1000 end
-            if XP > 1000 then
-                details = string.format("%.01f", XP/1000) .. "k" .. "/" .. maxXP .. "k XP"
-            end
+            if maxXP >= 1000 then maxXP = string.format("%.01f", maxXP/1000) .. "k" end
+            if XP >= 1000 then XP = string.format("%.01f", XP/1000) .. "k" end
+			details = XP .. "/" .. maxXP .. " XP"
         else
 			details = math.ceil(GetAverageItemLevel() - 0.5) .. itemLevelStr
 			-- Uncomment these two lines and comment the line above for versions <4.0.1
