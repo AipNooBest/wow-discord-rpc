@@ -4,7 +4,7 @@ counter = 0
 prevZone = ""
 prevSubZone = ""
 message = ""
-local width = 1
+local width = 3 -- Don't change to less than 3
 local height = 1
 
 function loop()
@@ -25,11 +25,20 @@ function IPC_CreateFrames()
 
     for i=1, frame_count do
         frames[i] = CreateFrame("Frame", nil, UIParent)
-        frames[i]:SetFrameStrata("TOOLTIP")
+        -- Make it independent of UI Scale
+        if math.abs(frames[i]:GetEffectiveScale() - 1) > 0.01 then -- Frame is not full size
+            frames[i]:SetScale(1 / frames[i]:GetParent():GetEffectiveScale()) -- Rescale the frame to be full size
+        end
+        -- Alternation of frame strata helps to reduce amount of blur between frames
+        if i % 2 == 0 then
+            frames[i]:SetFrameStrata("TOOLTIP")
+        else
+            frames[i]:SetFrameStrata("FULLSCREEN_DIALOG")
+        end
         frames[i]:SetWidth(width)
         frames[i]:SetHeight(height)
 
-        -- initialise it as black
+        -- Initialise it as black
         local t = frames[i]:CreateTexture(nil, "TOOLTIP")
         t:SetTexture(0, 0, 0, 0)
         t:SetAllPoints(frames[i])
@@ -79,15 +88,9 @@ function IPC_PaintSomething(text)
         if #trio > 1 then g = string.byte(trio:sub(2,2)) end
         if #trio > 2 then b = string.byte(trio:sub(3,3)) end
         squares_painted = squares_painted + 1
-        IPC_PaintFrame(frames[squares_painted*2-1], r, g, b)
+        IPC_PaintFrame(frames[squares_painted], r, g, b)
     end
-    squares_painted = 0
-    for _ in text:gmatch".?.?.?" do
-        squares_painted = squares_painted + 1
-        IPC_PaintFrame(frames[squares_painted*2], 0, 0, 0, 1)
-    end
-    -- and then paint the last one white
-    IPC_PaintFrame(frames[squares_painted*2-2], 255, 255, 255, 1)
+    IPC_PaintFrame(frames[squares_painted], 255, 255, 255, 1)
 end
 
 function IPC_EncodeMessage()
