@@ -88,13 +88,16 @@ def read_squares(hwnd):
     read = []
     skipped_pixels_counter = 0
     for pixel_idx in range(offset, int(im.width)):
+        current_pixel_colors = im.getpixel((pixel_idx, 0))
+        if current_pixel_colors[0] == 255 or current_pixel_colors[1] == 255 or current_pixel_colors[2] == 255:
+            break
+
         # When in-game width is set to 3 or more, we will skip two "bad" pixels.
         # First next pixel is 100% bad, second is 50/50, third one is 100% good, so we will get its color
         if 0 < skipped_pixels_counter < 3:
             skipped_pixels_counter += 1
             continue
 
-        current_pixel_colors = im.getpixel((pixel_idx, 0))
         next_pixel_colors = im.getpixel((pixel_idx+1, 0))
         # If we've found difference in pixels, there's a good chance these are
         # "smoothed" pixels and they can't be decoded as they don't represent any data
