@@ -1,5 +1,5 @@
 # Discord Rich Presence for World of Warcraft
-This particular repository was made for Mists of Pandaria(5.4.8), but it probably will work with other versions. If you are going to run it on other version, you will need to get a new list of zones with their IDs(`script/zones.txt`), because every version has its own list of IDs. If you use this on version <5.0.4, change [this line](https://github.com/AipNooBest/wow-discord-rpc/blob/9d8143a59577c18a380008a51373c239d531c6dc/IPC.lua#L101) in `IPC.lua` and the last line in `local.lua`.
+This branch has some changes to make it work for 3.3.5, but it probably will work with other versions less than 4.0.1. The current `zones.txt` file has all entrys for MoP, but can miss some entrys for 3.3.5. In case you will find them, open an issue and post `log.txt` file, I will add these entrys in 3.3.5-specific `zones.txt`.
 I tried to make the installation as easy as possible, so I hope you won't face any problems.
 
 ## Preview
@@ -14,7 +14,8 @@ I tried to make the installation as easy as possible, so I hope you won't face a
 ## Requirements
 - Python 3 for Windows, the [web-based installer](https://www.python.org/downloads/windows/) is OK. When it's finished installing, you will be asked if you want Python to be added to your $PATH, you have to say yes.
 ## Setup
-Create a folder with the name `IPC` in the `Interface/AddOns/`. Then [download](https://github.com/AipNooBest/wow-discord-rpc/archive/refs/heads/main.zip) the repository and extract files from `wow-discord-rpc-main` folder into the newly created directory. Then launch the `Installer.bat`. It will install everything is required, create `WoW.bat` and delete itself. From now on you'll need to run the game from this .bat file. You can create a shortcut on your desktop and set an icon. **You can't move `WoW.bat` anywhere else, it has to be launched from `AddOns/IPC/` directory.**
+Create a folder with the name `IPC` in the `Interface/AddOns/`. Then [download](https://github.com/AipNooBest/wow-discord-rpc/archive/refs/heads/wotlk.zip) the repository and extract files from `wow-discord-rpc-wotlk` folder into the newly created directory **OR** simply run `git clone -b wotlk --single-branch https://github.com/AipNooBest/wow-discord-rpc IPC` from `AddOns` folder.
+Then launch the `Installer.bat`. It will install everything is required, create `WoW.bat` and delete itself. From now on you'll need to run the game from this .bat file. You can create a shortcut on your desktop and set an icon. **You can't move `WoW.bat` anywhere else, it has to be launched from `AddOns/IPC/` directory.**
 
 **Note:** you have to play the game in borderless or windowed mode, full-screen is **not supported**!
 
@@ -32,7 +33,7 @@ If you see them, then AddOn is working properly. That means that you already sho
 
 That's it! Now you have a pleasant and informative Rich Presence in your Discord profile. It will update automatically as long as the script is kept running.
 
-If you want to translate it to your language, you can edit `local.lua` file and the line 11 at the `WoWPresence.py`. Zones' name will be localised automatically based on your game's locale.
+If you want to translate it to your language, check `local.lua` and `WoWPresence.py` files. Zones' name will be localised automatically based on your game's locale.
 
 ## LICENSE
 Both the addon and the WoWPresence.py script are in the public domain.
