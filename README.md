@@ -34,6 +34,8 @@ That's it! Now you have a pleasant and informative Rich Presence in your Discord
 
 If you want to translate it to your language, you can edit `local.lua` file and the line 11 at the `WoWPresence.py`. Zones' name will be localised automatically based on your game's locale.
 
+**Note:** If after entering the world you still see the message "In Main Menu", make sure that `SET gxMultisample` is set to `1` in `WTF/Config.wtf`.
+
 ## LICENSE
 Both the addon and the WoWPresence.py script are in the public domain.
 The rpc.py file is from [this repo](https://github.com/suclearnub/python-discord-rpc) and it's [MIT licenced](https://raw.githubusercontent.com/AipNooBest/wow-discord-rpc/main/script/rpc.py-LICENSE).
